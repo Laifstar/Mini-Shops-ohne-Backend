@@ -920,6 +920,15 @@ html:has(dialog[open]) {
   background: transparent;
 }
 
+/* Windows contrast themes (forced colors) replace the grey above with the
+   normal button colour, so a locked button would look active. GrayText is
+   the system colour meant for exactly this. */
+@media (forced-colors: active) {
+  .stepper__button[aria-disabled="true"] {
+    color: GrayText;
+  }
+}
+
 .stepper__value {
   min-width: 2rem;
   font-weight: 700;
