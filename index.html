@@ -29,8 +29,7 @@
         <span class="brand__tag">Energy Shot</span>
       </p>
 
-      <!-- Display only for now; opening the cart is issue #11. -->
-      <p class="cart-indicator">
+      <button type="button" class="cart-indicator" id="cart-button" aria-haspopup="dialog">
         <svg class="cart-indicator__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
           <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <circle cx="9.5" cy="19" r="1.5" fill="currentColor"/>
@@ -42,7 +41,7 @@
              readers ("Warenkorb 3 Artikel") and fits 1 as well as 3. -->
         <span class="cart-indicator__count" data-cart-count>0</span>
         <span class="visually-hidden">Artikel</span>
-      </p>
+      </button>
     </div>
   </header>
 
@@ -221,6 +220,58 @@
     </section>
   </dialog>
 
+  <!-- ===== Cart =====
+       Same dialog behaviour as the product modal (see setupDialog in app.js). -->
+  <dialog class="dialog dialog--cart" id="cart-dialog" aria-labelledby="cart-dialog-title">
+    <div class="dialog__header">
+      <!-- tabindex="-1": app.js parks focus here when the focused control
+           disappears (e.g. after removing the last item). -->
+      <h2 class="dialog__title" id="cart-dialog-title" tabindex="-1">Warenkorb</h2>
+      <button type="button" class="dialog__close" data-action="close-dialog">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="visually-hidden">Schließen</span>
+      </button>
+    </div>
+
+    <div class="dialog__body">
+      <p class="cart__empty" data-field="empty">
+        Dein Warenkorb ist noch leer. Wie wäre es mit einem DOPPIO Original?
+      </p>
+
+      <ul class="cart__lines" data-field="lines"></ul>
+
+      <dl class="cart__summary" data-field="summary">
+        <div>
+          <dt>Zwischensumme</dt>
+          <dd data-field="subtotal"></dd>
+        </div>
+        <div>
+          <dt>Pfand <span class="cart__deposit-note" data-field="depositNote"></span></dt>
+          <dd data-field="deposit"></dd>
+        </div>
+        <div class="cart__total">
+          <dt>Gesamt</dt>
+          <dd data-field="total"></dd>
+        </div>
+      </dl>
+      <p class="cart__note" data-field="note">
+        Alle Preise inkl. MwSt. Versandkosten werden in der Demo nicht berechnet.
+      </p>
+
+      <!-- Live region INSIDE the dialog: while a modal is open, everything
+           outside it is inert and hidden from screen readers, so the page
+           toast could not announce anything from here. -->
+      <p class="cart__status" role="status" data-field="status"></p>
+    </div>
+
+    <div class="dialog__footer" data-field="actions">
+      <button type="button" class="button" data-action="clear-cart">Warenkorb leeren</button>
+      <button type="button" class="button button--primary" data-action="checkout">Zur Kasse</button>
+    </div>
+  </dialog>
+
   <!-- Confirmation after "In den Warenkorb". role="status" makes screen
        readers announce new text politely, without moving focus. -->
   <div class="toast" id="toast" role="status"></div>
@@ -241,6 +292,32 @@
           Details<span class="visually-hidden" data-field="detailsLabel"></span>
         </button>
       </div>
+    </li>
+  </template>
+
+  <template id="cart-line-template">
+    <li class="cart-line">
+      <div class="cart-line__media" data-field="media"></div>
+      <div class="cart-line__info">
+        <p class="cart-line__name" data-field="name"></p>
+        <p class="cart-line__unit-price" data-field="unitPrice"></p>
+      </div>
+      <p class="cart-line__total" data-field="lineTotal"></p>
+
+      <!-- The group label gives the +/- buttons their context
+           ("Menge DOPPIO Original, Eine Dose weniger"). -->
+      <div class="stepper" role="group" data-field="stepper">
+        <button type="button" class="stepper__button" data-action="decrease">
+          <span aria-hidden="true">−</span><span class="visually-hidden">Eine Dose weniger</span>
+        </button>
+        <span class="stepper__value" data-field="quantity"></span>
+        <button type="button" class="stepper__button" data-action="increase">
+          <span aria-hidden="true">+</span><span class="visually-hidden">Eine Dose mehr</span>
+        </button>
+      </div>
+      <button type="button" class="cart-line__remove" data-action="remove">
+        Entfernen<span class="visually-hidden" data-field="removeLabel"></span>
+      </button>
     </li>
   </template>
 

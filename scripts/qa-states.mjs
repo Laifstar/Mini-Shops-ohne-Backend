@@ -31,4 +31,27 @@ export const states = [
       await page.waitForSelector("#toast.is-visible");
     },
   },
+  {
+    // Issue #11: the cart dialog, once empty and once with three flavours.
+    id: "warenkorb-leer",
+    label: "Warenkorb leer",
+    enter: async (page) => {
+      await page.click("#cart-button");
+      await page.waitForSelector("#cart-dialog[open]");
+    },
+  },
+  {
+    id: "warenkorb-gefuellt",
+    label: "Warenkorb gefüllt",
+    enter: async (page) => {
+      // Filled via storage (format of js/cart.js) instead of three trips
+      // through the modal; each state runs in its own empty browser context.
+      await page.evaluate(() =>
+        localStorage.setItem("doppio-cart-v1", JSON.stringify({ original: 3, "mango-chili": 2, crema: 1 }))
+      );
+      await page.reload({ waitUntil: "networkidle0" });
+      await page.click("#cart-button");
+      await page.waitForSelector("#cart-dialog[open]");
+    },
+  },
 ];

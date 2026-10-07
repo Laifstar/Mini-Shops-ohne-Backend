@@ -81,9 +81,31 @@ const Cart = (() => {
     return getQuantity(productId) - before;
   }
 
+  function remove(productId) {
+    setQuantity(productId, 0);
+  }
+
+  function clear() {
+    quantities = {};
+    commit();
+  }
+
   /** Number of cans over all flavours, for the header. */
   function getItemCount() {
     return Object.values(quantities).reduce((sum, quantity) => sum + quantity, 0);
+  }
+
+  /** Everything the cart dialog needs in one object; all amounts in cents. */
+  function getSummary() {
+    const lines = Object.entries(quantities).map(([id, quantity]) => {
+      const product = productsById.get(id);
+      return { product, quantity, totalCents: product.priceCents * quantity };
+    });
+    const itemCount = getItemCount();
+    const subtotalCents = lines.reduce((sum, line) => sum + line.totalCents, 0);
+    const depositCents = itemCount * DEPOSIT_PER_CAN_CENTS;
+
+    return { lines, itemCount, subtotalCents, depositCents, totalCents: subtotalCents + depositCents };
   }
 
   /** Calls `listener` after every change; returns an unsubscribe function. */
@@ -92,5 +114,15 @@ const Cart = (() => {
     return () => listeners.delete(listener);
   }
 
-  return Object.freeze({ MAX_QUANTITY, add, getItemCount, subscribe });
+  return Object.freeze({
+    MAX_QUANTITY,
+    add,
+    setQuantity,
+    remove,
+    clear,
+    getQuantity,
+    getItemCount,
+    getSummary,
+    subscribe,
+  });
 })();

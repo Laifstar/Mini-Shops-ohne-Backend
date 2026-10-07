@@ -46,6 +46,7 @@ Alternativ in VS Code mit der Erweiterung *Live Server* („Go Live“).
 | Detailmodal: „Details“ öffnet Beschreibung, Preis, Koffein-Pflichthinweis, Nährwerttabelle (pro 100 ml und pro Dose) und Zutaten des angeklickten Produkts | #3 |
 | Modal schließen per ✕-Button, Klick auf den Hintergrund oder Esc; Fokus kehrt zum Auslöser zurück; Seite dahinter gesperrt, ohne seitlichen Sprung; Einblenden nur ohne „Bewegung reduzieren“ | #4 |
 | In den Warenkorb: Menge 1–24 im Detailmodal, Bestätigung, Anzahl im Header, höchstens 24 Dosen pro Sorte, bleibt nach dem Neuladen erhalten (`localStorage`) | #10 |
+| Warenkorb ansehen und bearbeiten: Zeilen mit Preis pro Dose und Zeilensumme, Menge mit + und −, Sorte entfernen, Warenkorb leeren, Zwischensumme, Pfand und Gesamt, Hinweis bei leerem Warenkorb, „Zur Kasse“ als Demo | #11 |
 
 ## Aufbau
 

@@ -233,8 +233,14 @@ input {
   padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
   border: 2px solid rgb(244 231 212 / 0.4);
   border-radius: var(--radius-pill);
+  background: transparent;
   color: var(--color-crema);
   font-weight: 700;
+  cursor: pointer;
+}
+
+.cart-indicator:hover {
+  border-color: var(--color-gold);
 }
 
 /* Without flex: none the icon is the first thing flexbox shrinks on 320px screens. */
@@ -780,6 +786,186 @@ html:has(dialog[open]) {
   border: 2px solid var(--color-muted);
   border-radius: var(--radius-s);
   background: var(--color-surface);
+}
+
+/* ---------- Cart ---------- */
+
+.dialog--cart {
+  width: min(100% - 1rem, 34rem);
+}
+
+.dialog__footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-line);
+}
+
+.cart__empty {
+  margin: var(--space-4) 0;
+  color: var(--color-muted);
+}
+
+.cart__lines {
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+/* Two rows per line: product info and total on top, controls below. */
+.cart-line {
+  display: grid;
+  grid-template-areas:
+    "media info   total"
+    "media stepper remove";
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.cart-line__media {
+  grid-area: media;
+  align-self: start;
+}
+
+.cart-line__media .can {
+  width: 2.5rem;
+  height: auto;
+}
+
+.cart-line__info {
+  grid-area: info;
+}
+
+.cart-line__name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.cart-line__unit-price {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.cart-line__total {
+  grid-area: total;
+  align-self: start;
+  margin: 0;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepper {
+  display: inline-flex;
+  grid-area: stepper;
+  align-items: center;
+  justify-self: start;
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-pill);
+}
+
+.stepper__button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem; /* 44px touch target, see review checklist C2 */
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stepper__button:hover {
+  background: var(--color-crema);
+}
+
+.stepper__button[aria-disabled="true"] {
+  color: #a8998e;
+  cursor: not-allowed;
+}
+
+.stepper__button[aria-disabled="true"]:hover {
+  background: transparent;
+}
+
+.stepper__value {
+  min-width: 2rem;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-line__remove {
+  grid-area: remove;
+  justify-self: end;
+  min-height: 2.75rem;
+  padding: var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cart-line__remove:hover {
+  color: var(--color-ink);
+}
+
+.cart__summary {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.cart__summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.cart__summary dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__deposit-note {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.cart__total {
+  padding-top: var(--space-2);
+  border-top: 2px solid var(--color-ink);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.cart__note {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* Styled only when it has content, but never display: none: a live region
+   has to be in the accessibility tree *before* its text changes, otherwise
+   screen readers miss the announcement. */
+.cart__status {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cart__status:not(:empty) {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-s);
+  background: var(--color-crema);
 }
 
 /* ---------- Toast ---------- */
