@@ -10,4 +10,14 @@
  * Shape: { id: "file-name-safe", label: "Deutsche Beschriftung", enter: async (page) => {} }
  * Add `fullPage: true` only for states without fixed or sticky overlays.
  */
-export const states = [];
+export const states = [
+  {
+    // Issue #3: the modal is the first thing Lighthouse never sees.
+    id: "detailmodal",
+    label: "Detailmodal geöffnet",
+    enter: async (page) => {
+      await page.click('[data-action="show-details"]');
+      await page.waitForSelector("#product-dialog[open]");
+    },
+  },
+];
