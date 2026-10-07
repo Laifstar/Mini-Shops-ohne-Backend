@@ -78,4 +78,12 @@ npm run screenshot:github -- board <name> # Board, issue:<nr> oder pr:<nr> → d
 | `docs/screenshots/issue-<nr>/` | Stand nach dem Issue: Screenshots Desktop und Mobil, axe-core-Ergebnis, Lighthouse-Reports, Zusammenfassung in `ergebnis.md` |
 | `docs/screenshots/prozess/` | Verlauf auf GitHub: Board, Issues mit Kommentaren, Pull Requests (fortlaufend nummeriert) |
 
+## Prüfung und Review
+
+| Dokument | Inhalt |
+|----------|--------|
+| [docs/testprotokoll.md](docs/testprotokoll.md) | Abschluss-Testrunde (#5): Akzeptanzkriterien, 63 automatische Tests, Lastprobe, Browser, alle gefundenen Fehler, manuelle Prüfliste fürs Team |
+| [docs/review-checkliste.md](docs/review-checkliste.md) | Review-Checkliste mit Prüfwegen, Schweregraden und Übersicht aller Reviews; Icebox |
+| [docs/barrierefreiheit.md](docs/barrierefreiheit.md) | Prüfprotokoll Barrierefreiheit (#12) |
+
 `screenshot:github` arbeitet ohne Anmeldung und funktioniert deshalb nur, solange Repository und Board öffentlich sind.
