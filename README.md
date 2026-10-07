@@ -34,8 +34,26 @@ mergen, Issue kommentieren und abschließen.
 
 ## Starten
 
-Kein Server, kein Build: **`index.html` per Doppelklick öffnen** (entsteht mit Issue #1).
+Kein Server, kein Build: **`index.html` per Doppelklick öffnen.**
 Alternativ in VS Code mit der Erweiterung *Live Server* („Go Live“).
+
+## Funktionen
+
+| Funktion | Issue |
+|----------|-------|
+| Grundgerüst: Header, Hero mit Dosenvergleich, Footer; Produktdaten als JavaScript-Modul | #1 |
+| Listenansicht: 6 Sorten als Karten mit Bild, Preis, Grundpreis pro Liter und Merkmalen, 1/2/3 Spalten je nach Bildschirm | #2 |
+
+## Aufbau
+
+```text
+index.html        Struktur und <template>-Bausteine
+css/styles.css    Design Tokens, Basis, Komponenten (mobile first)
+js/data.js        Produktdaten (ersetzt das Backend)
+js/app.js         Darstellung und Events
+tests/            Browser-Tests, eine Datei pro Issue
+scripts/          Prüf- und Screenshot-Werkzeuge
+```
 
 ## Qualitätssicherung und Nachweise
 
