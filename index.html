@@ -15,6 +15,7 @@
        "defer" loads in parallel and runs in document order after parsing,
        so later scripts can rely on the data being there. -->
   <script src="js/data.js" defer></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
   <!-- First focusable element: lets keyboard users skip the header. -->
@@ -99,9 +100,9 @@
           </p>
         </div>
 
-        <!-- Product list area: stays empty in the HTML on purpose. The cards
-             are generated from js/data.js (issue #2), so the products exist
-             in exactly one place and cannot drift apart. -->
+        <!-- Product list area: stays empty in the HTML on purpose. app.js
+             generates the cards from js/data.js, so the products exist in
+             exactly one place and cannot drift apart. -->
         <ul class="product-grid" id="product-grid"></ul>
 
         <noscript>
@@ -126,5 +127,35 @@
       </p>
     </div>
   </footer>
+
+  <!-- ===== Templates: inert markup that app.js clones and fills. ===== -->
+
+  <template id="product-card-template">
+    <li class="product-card">
+      <div class="product-card__media" data-field="media"></div>
+      <div class="product-card__body">
+        <h3 class="product-card__title" data-field="name">Produkt</h3>
+        <p class="product-card__flavour" data-field="flavour"></p>
+        <p class="product-card__price">
+          <span class="price" data-field="price"></span>
+          <span class="unit-price" data-field="unitPrice"></span>
+        </p>
+      </div>
+    </li>
+  </template>
+
+  <!-- Same shape as the DOPPIO can in the hero; colours are set per product.
+       The hero keeps its own copy on purpose: it must render without JS. -->
+  <template id="can-template">
+    <svg class="can" viewBox="0 0 120 200" aria-hidden="true" focusable="false">
+      <rect class="can__rim" x="26" y="8" width="68" height="14" rx="5"/>
+      <rect class="can__body" x="18" y="18" width="84" height="168" rx="12"/>
+      <rect class="can__band" x="18" y="118" width="84" height="26"/>
+      <rect class="can__shine" x="28" y="26" width="9" height="150" rx="4.5"/>
+      <text class="can__logo" x="60" y="92" text-anchor="middle">DOPPIO</text>
+      <text class="can__volume" x="60" y="172" text-anchor="middle">150 ml</text>
+      <rect class="can__rim" x="26" y="182" width="68" height="10" rx="4"/>
+    </svg>
+  </template>
 </body>
 </html>

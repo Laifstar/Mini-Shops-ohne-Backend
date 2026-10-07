@@ -395,6 +395,124 @@ input {
   color: var(--color-muted);
 }
 
+/* Explicit breakpoints instead of auto-fill, so the layout is predictable
+   on every screen: 1 column on phones, 2 on tablets, 3 on desktops. */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 40rem) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+/* --tint is the can colour of the product (set in app.js). */
+.product-card__media {
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: radial-gradient(
+    circle at 50% 60%,
+    color-mix(in srgb, var(--tint, #cccccc) 30%, white),
+    color-mix(in srgb, var(--tint, #cccccc) 8%, white) 70%
+  );
+}
+
+.product-card__media .can {
+  width: auto;
+  height: 10rem;
+  filter: drop-shadow(0 10px 12px rgb(31 20 16 / 0.25));
+}
+
+.product-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+
+.product-card__title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.product-card__flavour {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+/* margin-top: auto pushes the price to the bottom, so prices line up
+   across cards even when a flavour or the tags wrap to a second line. */
+.product-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: auto 0 var(--space-3);
+  padding-top: var(--space-3);
+}
+
+.price {
+  font-size: 1.375rem;
+  font-weight: 800;
+}
+
+.unit-price {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tag--badge {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.tag--sugar-free {
+  background: #dcfce7;
+  color: #14532d;
+}
+
 .notice {
   padding: var(--space-4);
   border: 2px dashed var(--color-line);
