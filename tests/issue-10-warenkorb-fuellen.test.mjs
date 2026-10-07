@@ -73,6 +73,29 @@ describe("Issue #10: Produkte in den Warenkorb legen", () => {
     assert.equal(text, "Warenkorb 5 Artikel", "vollständiger Text für Screenreader");
   });
 
+  it("der Header bleibt mit Warenkorb auf jedem Bildschirm einzeilig", async () => {
+    for (const width of [320, 390, 480, 768, 1280]) {
+      await page.setViewport({ width, height: 800 });
+      const wrapped = await page.$$eval(".site-header .brand > span, .cart-indicator > span", (spans) =>
+        spans
+          // Hidden spans (display: none or visually hidden) cannot wrap.
+          .filter((span) => span.checkVisibility() && span.getBoundingClientRect().width > 1)
+          // Count the lines of the text itself: flex items are blockified, so
+          // the element has a single box even when its text wraps.
+          .filter((span) => {
+            const range = document.createRange();
+            range.selectNodeContents(span);
+            const lineTops = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top)));
+            return lineTops.size > 1;
+          })
+          .map((span) => span.textContent.trim())
+      );
+      assert.deepEqual(wrapped, [], `${width} px: Umbruch in ${wrapped.join(", ")}`);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      assert.ok(overflow <= 0, `${width} px: kein horizontales Scrollen`);
+    }
+  });
+
   it("mehr als 24 Dosen pro Sorte sind nicht möglich, die Bestätigung weist darauf hin", async () => {
     await addToCart("crema", 20);
     await addToCart("crema", 10);

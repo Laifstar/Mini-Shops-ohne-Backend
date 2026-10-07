@@ -254,14 +254,18 @@ input {
   font-size: 0.875rem;
 }
 
-/* Below 384px brand, tagline and cart no longer fit in one row. The cart
-   label is only hidden visually: icon and count stay visible, the text for
-   screen readers ("Warenkorb 0 Artikel") stays complete. */
-@media (max-width: 23.99rem) {
+/* Below 480px brand, tagline and cart no longer fit in one row and the
+   tagline would wrap into two lines; it is decoration, so it goes first. */
+@media (max-width: 29.99rem) {
   .brand__tag {
     display: none;
   }
+}
 
+/* Below 384px the cart label goes as well. It is only hidden visually: icon
+   and count stay visible, the text for screen readers ("Warenkorb 0
+   Artikel") stays complete. */
+@media (max-width: 23.99rem) {
   .cart-indicator__label {
     position: absolute;
     width: 1px;
