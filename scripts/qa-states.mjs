@@ -20,4 +20,15 @@ export const states = [
       await page.waitForSelector("#product-dialog[open]");
     },
   },
+  {
+    // Issue #10: confirmation toast and the updated count in the header.
+    id: "warenkorb-bestaetigung",
+    label: "Nach „In den Warenkorb“",
+    enter: async (page) => {
+      await page.click('[data-action="show-details"]');
+      await page.waitForSelector("#product-dialog[open]");
+      await page.click('#add-to-cart-form button[type="submit"]');
+      await page.waitForSelector("#toast.is-visible");
+    },
+  },
 ];

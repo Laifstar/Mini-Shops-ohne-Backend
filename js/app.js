@@ -4,8 +4,9 @@
  * Loaded as a classic deferred script instead of an ES module on purpose:
  * browsers block module imports from file:// URLs, and the customer demo
  * has to work by double-clicking index.html, without server or build step.
- * The trade-off is a shared global scope, which is why data.js exposes only
- * PRODUCTS and DEPOSIT_PER_CAN_CENTS.
+ * The trade-off is a shared global scope, which is why the other scripts
+ * expose as little as possible: data.js PRODUCTS and DEPOSIT_PER_CAN_CENTS,
+ * cart.js a single Cart object.
  *
  * All content is inserted via textContent and cloned <template>s, never
  * via innerHTML. Today the data is static, but once it comes from an API
@@ -209,6 +210,8 @@ function createNutritionRows(product) {
 function fillProductDialog(product) {
   const field = (name) => productDialog.querySelector(`[data-field="${name}"]`);
 
+  // Read by the "In den Warenkorb" form to know which product to add.
+  productDialog.dataset.productId = product.id;
   field("name").textContent = product.name;
   field("media").style.setProperty("--tint", product.colors.body);
   field("media").replaceChildren(createCan(product.colors));
@@ -225,6 +228,7 @@ function fillProductDialog(product) {
 
 function openProductDialog(product, trigger) {
   fillProductDialog(product);
+  quantityInput.value = "1";
   openDialog(productDialog, trigger);
   // The dialog body keeps its scroll position between openings; start every
   // product at the top.
@@ -243,8 +247,62 @@ productGrid.addEventListener("click", (event) => {
   if (product) openProductDialog(product, button);
 });
 
+// ---------- Toast ----------
+
+const toast = document.querySelector("#toast");
+const TOAST_DURATION_MS = 3500;
+let toastTimer;
+
+function showToast(message) {
+  clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+    // Clear the text as well: otherwise a screen reader could still find the
+    // invisible message, and the same message twice would not be re-announced.
+    toast.textContent = "";
+  }, TOAST_DURATION_MS);
+}
+
+// ---------- Add to cart (issue #10) ----------
+
+const addToCartForm = document.querySelector("#add-to-cart-form");
+const quantityInput = document.querySelector("#quantity-input");
+const cartCount = document.querySelector("[data-cart-count]");
+
+addToCartForm.addEventListener("submit", (event) => {
+  // No backend: the form must never navigate. Validation (1–24, whole
+  // numbers) has already been done by the browser at this point.
+  event.preventDefault();
+
+  const productId = productDialog.dataset.productId;
+  const product = PRODUCTS.find((item) => item.id === productId);
+  const requested = Number(quantityInput.value);
+  const added = Cart.add(productId, requested);
+
+  // Close first: the toast lives outside the dialog and is only announced
+  // once the page is no longer inert.
+  productDialog.close();
+
+  if (added === requested) {
+    showToast(`${added} × ${product.name} im Warenkorb`);
+  } else if (added > 0) {
+    showToast(`Maximal ${Cart.MAX_QUANTITY} Dosen pro Sorte: ${added} × ${product.name} hinzugefügt`);
+  } else {
+    showToast(`Maximal ${Cart.MAX_QUANTITY} Dosen pro Sorte: ${product.name} ist schon voll im Warenkorb`);
+  }
+});
+
+function renderCartCount() {
+  cartCount.textContent = String(Cart.getItemCount());
+}
+
 // ---------- Start ----------
 
 setupDialog(productDialog);
 renderDepositNote();
 renderProductList();
+// Keeps the header count in sync with every change, wherever it comes from.
+Cart.subscribe(renderCartCount);
+renderCartCount();

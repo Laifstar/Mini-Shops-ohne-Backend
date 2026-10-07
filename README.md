@@ -45,6 +45,7 @@ Alternativ in VS Code mit der Erweiterung *Live Server* („Go Live“).
 | Listenansicht: 6 Sorten als Karten mit Bild, Preis, Grundpreis pro Liter und Merkmalen, 1/2/3 Spalten je nach Bildschirm | #2 |
 | Detailmodal: „Details“ öffnet Beschreibung, Preis, Koffein-Pflichthinweis, Nährwerttabelle (pro 100 ml und pro Dose) und Zutaten des angeklickten Produkts | #3 |
 | Modal schließen per ✕-Button, Klick auf den Hintergrund oder Esc; Fokus kehrt zum Auslöser zurück; Seite dahinter gesperrt, ohne seitlichen Sprung; Einblenden nur ohne „Bewegung reduzieren“ | #4 |
+| In den Warenkorb: Menge 1–24 im Detailmodal, Bestätigung, Anzahl im Header, höchstens 24 Dosen pro Sorte, bleibt nach dem Neuladen erhalten (`localStorage`) | #10 |
 
 ## Aufbau
 
@@ -52,6 +53,7 @@ Alternativ in VS Code mit der Erweiterung *Live Server* („Go Live“).
 index.html        Struktur und <template>-Bausteine
 css/styles.css    Design Tokens, Basis, Komponenten (mobile first)
 js/data.js        Produktdaten (ersetzt das Backend)
+js/cart.js        Warenkorb-Logik ohne DOM-Code, speichert in localStorage
 js/app.js         Darstellung und Events
 tests/            Browser-Tests, eine Datei pro Issue
 scripts/          Prüf- und Screenshot-Werkzeuge
