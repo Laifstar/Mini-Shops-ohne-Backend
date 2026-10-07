@@ -656,6 +656,13 @@ html:has(dialog[open]) {
   padding: var(--space-5);
 }
 
+/* The body fills the dialog, and the dialog clips everything outside it
+   (overflow: hidden), so the usual ring outside the element would be cut
+   off and the focus invisible. Drawn inside instead. */
+.dialog__body:focus-visible {
+  outline-offset: -3px;
+}
+
 .product-detail {
   display: grid;
   gap: var(--space-5);
