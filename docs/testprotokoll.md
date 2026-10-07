@@ -42,7 +42,9 @@
 | Lauf | Ergebnis | Dauer |
 |---|---|---|
 | Normal, mehrfach während der Entwicklung | grün | ca. 45 s |
-| **Lastprobe:** drei vollständige Läufe gleichzeitig (24 Chrome-Instanzen) | 3 × 60/60 grün | 6–7 min |
+| **Lastprobe:** drei vollständige Läufe gleichzeitig (24 Chrome-Instanzen) | 3 × 60/60 grün¹ | 6–7 min |
+
+¹ Die Lastprobe lief, bevor die drei Quelltext-Tests aus #5 dazukamen, deshalb 60 statt 63. Diese drei lesen nur Dateien und starten keinen Browser, Last kann sie also nicht beeinflussen.
 
 Beim Review von #15 lief der Scroll-Test aus #3 **einmal** in einen Timeout. Er war in keinem weiteren Lauf reproduzierbar, auch nicht unter dreifacher Last. Status: **beobachten**. Bei einem erneuten Auftreten wird der Test genauer instrumentiert.
 
