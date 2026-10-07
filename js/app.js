@@ -99,6 +99,15 @@ function renderProductList() {
   productGrid.replaceChildren(fragment);
 }
 
+// The deposit is stated in the section intro as well; filling it from the
+// same constant as the prices keeps both from drifting apart.
+function renderDepositNote() {
+  for (const element of document.querySelectorAll("[data-deposit]")) {
+    element.textContent = formatPrice(DEPOSIT_PER_CAN_CENTS);
+  }
+}
+
 // ---------- Start ----------
 
+renderDepositNote();
 renderProductList();
