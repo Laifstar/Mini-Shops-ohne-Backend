@@ -703,14 +703,6 @@ html:has(dialog[open]) {
   color: var(--color-muted);
 }
 
-.add-to-cart {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-}
-
 /* ---------- Footer ---------- */
 
 .site-footer {
