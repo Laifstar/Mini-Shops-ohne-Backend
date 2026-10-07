@@ -76,12 +76,13 @@ npm run screenshot:github -- board <name> # Board, issue:<nr> oder pr:<nr> → d
 | Ordner | Inhalt |
 |--------|--------|
 | `docs/screenshots/issue-<nr>/` | Stand nach dem Issue: Screenshots Desktop und Mobil, axe-core-Ergebnis, Lighthouse-Reports, Zusammenfassung in `ergebnis.md` |
-| `docs/screenshots/prozess/` | Verlauf auf GitHub: Board, Issues mit Kommentaren, Pull Requests (fortlaufend nummeriert) |
+| `docs/screenshots/prozess/` | Verlauf auf GitHub: Board, Issues mit Kommentaren, Pull Requests (fortlaufend nummeriert, JPEG; die hochaufgelösten Originale bleiben lokal in `prozess-original/`) |
 
-## Prüfung und Review
+## Dokumentation
 
 | Dokument | Inhalt |
 |----------|--------|
+| [docs/vorgehensdokumentation.md](docs/vorgehensdokumentation.md) | **Vorgehen im Projekt:** Ablauf pro Issue, Leitfragen 1.1–1.4, Entwicklung von Board und Shop in Bildern, Learnings |
 | [docs/testprotokoll.md](docs/testprotokoll.md) | Abschluss-Testrunde (#5): Akzeptanzkriterien, 63 automatische Tests, Lastprobe, Browser, alle gefundenen Fehler, manuelle Prüfliste fürs Team |
 | [docs/review-checkliste.md](docs/review-checkliste.md) | Review-Checkliste mit Prüfwegen, Schweregraden und Übersicht aller Reviews; Icebox |
 | [docs/barrierefreiheit.md](docs/barrierefreiheit.md) | Prüfprotokoll Barrierefreiheit (#12) |
