@@ -429,7 +429,8 @@ input {
 }
 
 /* --tint is the can colour of the product (set in app.js). */
-.product-card__media {
+.product-card__media,
+.product-detail__media {
   display: grid;
   place-items: center;
   padding: var(--space-6);
@@ -464,8 +465,8 @@ input {
   color: var(--color-muted);
 }
 
-/* margin-top: auto pushes the price to the bottom, so prices line up
-   across cards even when a flavour or the tags wrap to a second line. */
+/* margin-top: auto pushes price and button to the bottom, so buttons line
+   up across cards even when a flavour or the tags wrap to a second line. */
 .product-card__price {
   display: flex;
   flex-wrap: wrap;
@@ -483,6 +484,10 @@ input {
 .unit-price {
   font-size: 0.875rem;
   color: var(--color-muted);
+}
+
+.product-card__details {
+  align-self: flex-start;
 }
 
 .tags {
@@ -517,6 +522,167 @@ input {
   padding: var(--space-4);
   border: 2px dashed var(--color-line);
   border-radius: var(--radius-m);
+}
+
+/* ---------- Product detail modal ---------- */
+
+/* No padding on the dialog itself: header and body bring their own. */
+.dialog {
+  width: min(100% - 1rem, 56rem);
+  max-height: calc(100vh - 1rem);
+  max-height: calc(100dvh - 1rem); /* dvh: respects mobile browser toolbars */
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.35);
+}
+
+/* Header stays put, only the body scrolls: the product name stays visible
+   even on a small phone with a long nutrition table. */
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dialog::backdrop {
+  background: rgb(20 12 8 / 0.65);
+}
+
+.dialog__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.dialog__title {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+.dialog__body {
+  overflow-y: auto;
+  overscroll-behavior: contain; /* scrolling the dialog never scrolls the page */
+  padding: var(--space-5);
+}
+
+.product-detail {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.product-detail__media {
+  padding: var(--space-5);
+  border-radius: var(--radius-m);
+}
+
+.product-detail__media .can {
+  width: auto;
+  height: 9rem;
+  filter: drop-shadow(0 10px 12px rgb(31 20 16 / 0.25));
+}
+
+@media (min-width: 48rem) {
+  .product-detail {
+    grid-template-columns: 15rem 1fr;
+    align-items: start;
+  }
+
+  .product-detail__media {
+    position: sticky;
+    top: 0;
+    padding: var(--space-7) var(--space-5);
+  }
+
+  .product-detail__media .can {
+    height: 13rem;
+  }
+}
+
+.product-detail__flavour {
+  margin-bottom: var(--space-2);
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.product-detail__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.price-note {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.caffeine-warning {
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--color-gold);
+  border-radius: var(--radius-s);
+  background: #fff4dc;
+  font-size: 0.9375rem;
+}
+
+.product-detail h3 {
+  margin-top: var(--space-5);
+  font-size: 1rem;
+}
+
+.nutrition {
+  width: 100%;
+  margin-bottom: var(--space-4);
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums; /* digits line up in the columns */
+}
+
+.nutrition th,
+.nutrition td {
+  padding: var(--space-2) var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+  text-align: right;
+}
+
+.nutrition thead th {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  vertical-align: bottom;
+}
+
+.nutrition thead th:first-child,
+.nutrition tbody th {
+  text-align: left;
+}
+
+.nutrition tbody th {
+  font-weight: 600;
+}
+
+.nutrition tbody th.nutrition__sub-row {
+  padding-left: var(--space-5);
+  font-weight: 400;
+}
+
+.product-detail__ingredients {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.add-to-cart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
 }
 
 /* ---------- Footer ---------- */

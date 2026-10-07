@@ -22,6 +22,10 @@ function formatPrice(cents) {
   return euro.format(cents / 100);
 }
 
+function formatNumber(value, maximumFractionDigits = 1) {
+  return value.toLocaleString("de-DE", { maximumFractionDigits });
+}
+
 // German price law (PAngV) requires the price per litre next to the price.
 // Non-breaking spaces keep "16,60 € / 1 l" from wrapping in the middle.
 function formatUnitPrice(product) {
@@ -87,6 +91,11 @@ function createProductCard(product) {
   const tags = createTagList(product);
   if (tags.children.length > 0) field("flavour").after(tags);
 
+  // Six buttons all called "Details" are ambiguous in a screen reader's
+  // list of controls; the hidden suffix makes each name unique.
+  field("detailsLabel").textContent = ` zu ${product.name}`;
+  card.querySelector('[data-action="show-details"]').dataset.productId = product.id;
+
   return card;
 }
 
@@ -106,6 +115,95 @@ function renderDepositNote() {
     element.textContent = formatPrice(DEPOSIT_PER_CAN_CENTS);
   }
 }
+
+// ---------- Product detail modal (issue #3) ----------
+
+const productDialog = document.querySelector("#product-dialog");
+const KJ_PER_KCAL = 4.184;
+
+// Rows of the nutrition table. Each row knows how to format itself for a
+// given factor (1 = per 100 ml, 1.5 = per 150 ml can), so both columns are
+// always calculated from the same per-100-ml source values.
+const amount = (key, unit, digits = 1) => (values, factor) =>
+  `${formatNumber(values[key] * factor, digits)} ${unit}`;
+
+const NUTRITION_ROWS = [
+  {
+    label: "Brennwert",
+    format: (values, factor) =>
+      `${formatNumber(values.energyKcal * factor * KJ_PER_KCAL, 0)} kJ / ` +
+      `${formatNumber(values.energyKcal * factor, 0)} kcal`,
+  },
+  { label: "Fett", format: amount("fat", "g") },
+  { label: "Kohlenhydrate", format: amount("carbs", "g") },
+  { label: "davon Zucker", format: amount("sugar", "g"), isSubRow: true },
+  { label: "Eiweiß", format: amount("protein", "g") },
+  { label: "Salz", format: amount("salt", "g", 2) },
+  { label: "Koffein", format: amount("caffeineMg", "mg", 0) },
+  { label: "Taurin", format: amount("taurineMg", "mg", 0) },
+];
+
+function getCaffeinePer100ml(product) {
+  return (product.caffeineMgPerCan / product.volumeMl) * 100;
+}
+
+function createNutritionRows(product) {
+  const values = { ...product.nutritionPer100ml, caffeineMg: getCaffeinePer100ml(product) };
+  const canFactor = product.volumeMl / 100;
+
+  return NUTRITION_ROWS.map((row) => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = row.label;
+    if (row.isSubRow) th.classList.add("nutrition__sub-row");
+
+    const per100ml = document.createElement("td");
+    per100ml.textContent = row.format(values, 1);
+    const perCan = document.createElement("td");
+    perCan.textContent = row.format(values, canFactor);
+
+    tr.append(th, per100ml, perCan);
+    return tr;
+  });
+}
+
+function fillProductDialog(product) {
+  const field = (name) => productDialog.querySelector(`[data-field="${name}"]`);
+
+  field("name").textContent = product.name;
+  field("media").style.setProperty("--tint", product.colors.body);
+  field("media").replaceChildren(createCan(product.colors));
+  field("flavour").textContent = product.flavour;
+  field("description").textContent = product.description;
+  field("price").textContent = formatPrice(product.priceCents);
+  field("deposit").textContent = formatPrice(DEPOSIT_PER_CAN_CENTS);
+  field("unitPrice").textContent = formatUnitPrice(product);
+  field("caffeinePer100ml").textContent = formatNumber(getCaffeinePer100ml(product), 0);
+  field("volume").textContent = `${product.volumeMl} ml`;
+  field("nutrition").replaceChildren(...createNutritionRows(product));
+  field("ingredients").textContent = product.ingredients;
+}
+
+function openProductDialog(product) {
+  fillProductDialog(product);
+  productDialog.showModal();
+  // The dialog body keeps its scroll position between openings; start every
+  // product at the top.
+  productDialog.querySelector(".dialog__body").scrollTop = 0;
+}
+
+// One delegated listener on the grid instead of one per card: fewer
+// listeners, and it keeps working if the list is ever re-rendered.
+productGrid.addEventListener("click", (event) => {
+  const button = event.target.closest('[data-action="show-details"]');
+  if (!button) return;
+
+  // Looked up by id, not by position: the modal must show the product that
+  // was actually clicked, even if the list order ever changes.
+  const product = PRODUCTS.find((item) => item.id === button.dataset.productId);
+  if (product) openProductDialog(product);
+});
 
 // ---------- Start ----------
 
