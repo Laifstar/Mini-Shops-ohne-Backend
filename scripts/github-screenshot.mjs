@@ -7,7 +7,9 @@
  *   npm run screenshot:github -- pr:6   pr-6-review
  *
  * Files get a running number (01-, 02-, …) in docs/screenshots/prozess/, so
- * the folder reads like a timeline of the project.
+ * the folder reads like a timeline of the project. JPEG at 1x keeps the
+ * repository small (the first PNGs at 2x added up to 92 MB); GitHub's UI
+ * stays readable at that size.
  *
  * The browser is not logged in, which only works because the repository and
  * the board are public. GitHub then shows "Sign in" buttons instead of edit
@@ -50,13 +52,16 @@ if (!CHROME_PATH) {
 
 mkdirSync(OUT_DIR, { recursive: true });
 const lastNumber = Math.max(0, ...readdirSync(OUT_DIR).map((file) => Number.parseInt(file, 10) || 0));
-const file = join(OUT_DIR, `${String(lastNumber + 1).padStart(2, "0")}-${name}.png`);
+const file = join(OUT_DIR, `${String(lastNumber + 1).padStart(2, "0")}-${name}.jpg`);
+// The "Files changed" tab of a PR with evidence runs to tens of thousands of
+// pixels (Lighthouse reports); the file list and the first diffs say enough.
+const MAX_HEIGHT = 3000;
 
 const browser = await puppeteer.launch({ executablePath: CHROME_PATH, headless: true });
 try {
   const page = await browser.newPage();
   // The board needs the width for four status columns side by side.
-  await page.setViewport({ width: target === "board" ? 1600 : 1280, height: 900, deviceScaleFactor: 2 });
+  await page.setViewport({ width: target === "board" ? 1600 : 1280, height: 900, deviceScaleFactor: 1 });
   await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
   const response = await page.goto(resolved.url, { waitUntil: "networkidle2", timeout: 60000 });
   if (!response?.ok()) throw new Error(`GitHub antwortet mit HTTP ${response?.status()} für ${resolved.url}`);
@@ -66,9 +71,12 @@ try {
   // Crop the global navigation (logo, "Sign in"); it says nothing about the project.
   const top = await page.evaluate(() => Math.ceil(document.querySelector("header")?.getBoundingClientRect().bottom ?? 0));
   const { width, height } = page.viewport();
-  const bottom = resolved.fullPage ? await page.evaluate(() => document.documentElement.scrollHeight) : height;
+  const pageBottom = resolved.fullPage ? await page.evaluate(() => document.documentElement.scrollHeight) : height;
+  const bottom = Math.min(pageBottom, top + MAX_HEIGHT);
   await page.screenshot({
     path: file,
+    type: "jpeg",
+    quality: 80,
     clip: { x: 0, y: top, width, height: bottom - top },
     captureBeyondViewport: resolved.fullPage,
   });

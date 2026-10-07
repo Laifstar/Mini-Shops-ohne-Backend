@@ -55,7 +55,8 @@ Ein Befund ist erst dann gut formuliert, wenn er **konkret** ist (Datei und Zeil
 | [#14](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/14) | #10 In den Warenkorb | 1 | S4 Umbruch im Header bei 390 px (behoben); in #8 übersehene CSS-Regel (behoben); N7 `localStorage` unter `file://` geteilt (belassen) | gemergt |
 | [#15](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/15) | #11 Warenkorb bearbeiten | 1 | N8 leerer Warenkorb ohne Weg zurück (Icebox); N9 Footer-Buttons umbrechen bei 390 px (belassen); unzuverlässiger Test an #5 übergeben | gemergt |
 | [#16](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/16) | #12 Barrierefreiheit | 1 | vier Barrieren B1–B4 im PR selbst behoben; N10, N11 (belassen) | gemergt |
-| PR zu #5 | #5 Testen und Review | 1 | siehe dort | – |
+| [#17](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/17) | #5 Testen und Review | **2** | S5 Widerspruch im Testprotokoll (60 vs. 63 Tests) → Runde 1 „Changes needed“, Korrektur, Runde 2 ohne Befund | gemergt |
+| [#18](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/18) | #13 Vorgehen dokumentieren | 1 | siehe dort | – |
 
 **Was die Reviews gebracht haben:**
 

@@ -1,7 +1,7 @@
 # Testprotokoll: Abschluss-Testrunde (Issue #5)
 
-**Prüfgegenstand:** der gesamte Shop nach #1–#4, #10–#12
-**Umgebung:** macOS 27.0, Chrome 154 (headless über Puppeteer), Node.js 26.5, axe-core 4.14, Lighthouse 13.5
+**Prüfgegenstand:** der gesamte Shop nach #1–#4, #10–#12\
+**Umgebung:** macOS 27.0, Chrome 154 (headless über Puppeteer), Node.js 26.5, axe-core 4.14, Lighthouse 13.5\
 **Zum Nachvollziehen:** `npm install && npm test` sowie `npm run qa:evidence -- 5`
 
 ## 1 Akzeptanzkriterien von #5
