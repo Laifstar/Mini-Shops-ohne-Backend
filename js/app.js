@@ -171,7 +171,6 @@ function createNutritionRows(product) {
 function fillProductDialog(product) {
   const field = (name) => productDialog.querySelector(`[data-field="${name}"]`);
 
-  productDialog.dataset.productId = product.id;
   field("name").textContent = product.name;
   field("media").style.setProperty("--tint", product.colors.body);
   field("media").replaceChildren(createCan(product.colors));
