@@ -110,7 +110,11 @@ function describeCommit() {
 }
 
 async function openPage(browser, url, viewport, problems) {
-  const page = await browser.newPage();
+  // A separate browser context per state: own localStorage, so every state
+  // starts like a first-time visitor (e.g. with an empty cart), no matter
+  // what earlier states did.
+  const context = await browser.createBrowserContext();
+  const page = await context.newPage();
   page.on("console", (message) => {
     if (["error", "warn", "warning"].includes(message.type())) problems.push(message.text());
   });
@@ -162,7 +166,7 @@ async function captureStates(browser, url) {
           targets: nodes.map((node) => node.target.join(" ")),
         })),
       });
-      await page.close();
+      await page.browserContext().close();
       console.log(`  ${state.label} (${viewportName}): ${axe.violations.length} axe-Verstöße`);
     }
   }
