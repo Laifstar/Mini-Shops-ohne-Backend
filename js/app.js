@@ -27,6 +27,11 @@ function formatNumber(value, maximumFractionDigits = 1) {
   return value.toLocaleString("de-DE", { maximumFractionDigits });
 }
 
+// "1 Dose", "2 Dosen": German needs the singular, a bare "Dosen" reads wrong.
+function formatCans(count) {
+  return count === 1 ? "1 Dose" : `${count} Dosen`;
+}
+
 // German price law (PAngV) requires the price per litre next to the price.
 // Non-breaking spaces keep "16,60 € / 1 l" from wrapping in the middle.
 function formatUnitPrice(product) {
@@ -269,7 +274,6 @@ function showToast(message) {
 
 const addToCartForm = document.querySelector("#add-to-cart-form");
 const quantityInput = document.querySelector("#quantity-input");
-const cartCount = document.querySelector("[data-cart-count]");
 
 addToCartForm.addEventListener("submit", (event) => {
   // No backend: the form must never navigate. Validation (1–24, whole
@@ -294,15 +298,134 @@ addToCartForm.addEventListener("submit", (event) => {
   }
 });
 
-function renderCartCount() {
-  cartCount.textContent = String(Cart.getItemCount());
+// ---------- Cart dialog (issue #11) ----------
+
+const cartButton = document.querySelector("#cart-button");
+const cartCount = document.querySelector("[data-cart-count]");
+const cartDialog = document.querySelector("#cart-dialog");
+const cartTitle = document.querySelector("#cart-dialog-title");
+const cartLineTemplate = document.querySelector("#cart-line-template");
+// Note: field names must be unique within the dialog, including the ones in
+// cloned cart lines, because querySelector returns the first match.
+const cartField = (name) => cartDialog.querySelector(`[data-field="${name}"]`);
+
+function createCartLine({ product, quantity, totalCents }) {
+  const line = cartLineTemplate.content.firstElementChild.cloneNode(true);
+  const field = (name) => line.querySelector(`[data-field="${name}"]`);
+
+  line.dataset.productId = product.id;
+  field("media").append(createCan(product.colors));
+  field("name").textContent = product.name;
+  field("unitPrice").textContent = `${formatPrice(product.priceCents)} pro Dose`;
+  field("lineTotal").textContent = formatPrice(totalCents);
+  field("quantity").textContent = String(quantity);
+  field("stepper").setAttribute("aria-label", `Menge ${product.name}`);
+  field("removeLabel").textContent = ` ${product.name}`;
+
+  // aria-disabled instead of disabled: a disabled button loses focus, and a
+  // keyboard user pressing "+" up to the limit would be dropped to <body>.
+  // The click handler ignores buttons marked this way.
+  const atMinimum = quantity <= 1;
+  const atMaximum = quantity >= Cart.MAX_QUANTITY;
+  line.querySelector('[data-action="decrease"]').setAttribute("aria-disabled", String(atMinimum));
+  line.querySelector('[data-action="increase"]').setAttribute("aria-disabled", String(atMaximum));
+
+  return line;
 }
+
+// One render function for header count and dialog, so both always show the
+// same state, no matter where a change comes from (modal, cart, page load).
+function renderCart() {
+  const summary = Cart.getSummary();
+  const isEmpty = summary.lines.length === 0;
+
+  cartCount.textContent = String(summary.itemCount);
+
+  cartField("empty").hidden = !isEmpty;
+  cartField("lines").hidden = isEmpty;
+  cartField("summary").hidden = isEmpty;
+  cartField("note").hidden = isEmpty;
+  cartField("actions").hidden = isEmpty;
+
+  cartField("lines").replaceChildren(...summary.lines.map(createCartLine));
+  cartField("subtotal").textContent = formatPrice(summary.subtotalCents);
+  cartField("depositNote").textContent =
+    `(${summary.itemCount} × ${formatPrice(DEPOSIT_PER_CAN_CENTS)})`;
+  cartField("deposit").textContent = formatPrice(summary.depositCents);
+  cartField("total").textContent = formatPrice(summary.totalCents);
+}
+
+function announceInCart(message) {
+  cartField("status").textContent = message;
+}
+
+/**
+ * Re-rendering replaces the clicked button with a new one. Put focus on its
+ * successor (same product, same action) so keyboard users keep their place;
+ * if that control is gone or hidden, fall back to the dialog title.
+ */
+function restoreCartFocus(productId, action) {
+  const line = productId
+    ? cartDialog.querySelector(`.cart-line[data-product-id="${CSS.escape(productId)}"]`)
+    : cartDialog;
+  const target = line?.querySelector(`[data-action="${action}"]`);
+
+  // Checking document.activeElement after focus() is not enough: a button
+  // that was just hidden (e.g. "Warenkorb leeren") still counts as focused
+  // until the browser's next style update silently moves focus to <body>.
+  if (target?.checkVisibility?.()) {
+    target.focus();
+  } else {
+    cartTitle.focus();
+  }
+}
+
+cartDialog.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button || button.getAttribute("aria-disabled") === "true") return;
+
+  const { action } = button.dataset;
+  const productId = button.closest(".cart-line")?.dataset.productId;
+  const product = PRODUCTS.find((item) => item.id === productId);
+
+  switch (action) {
+    case "increase":
+    case "decrease": {
+      const delta = action === "increase" ? 1 : -1;
+      Cart.setQuantity(productId, Cart.getQuantity(productId) + delta);
+      announceInCart(`${product.name}: ${formatCans(Cart.getQuantity(productId))}`);
+      break;
+    }
+    case "remove":
+      Cart.remove(productId);
+      announceInCart(`${product.name} entfernt`);
+      break;
+    case "clear-cart":
+      Cart.clear();
+      announceInCart("Warenkorb geleert");
+      break;
+    case "checkout":
+      announceInCart(
+        "Demo: Hier würde jetzt der Checkout starten. Ohne Backend wird nichts bestellt."
+      );
+      break;
+    default:
+      return; // "close-dialog" is handled by setupDialog()
+  }
+
+  restoreCartFocus(productId, action);
+});
+
+cartButton.addEventListener("click", () => {
+  announceInCart("");
+  openDialog(cartDialog, cartButton);
+});
 
 // ---------- Start ----------
 
 setupDialog(productDialog);
+setupDialog(cartDialog);
 renderDepositNote();
 renderProductList();
-// Keeps the header count in sync with every change, wherever it comes from.
-Cart.subscribe(renderCartCount);
-renderCartCount();
+Cart.subscribe(renderCart);
+renderCart();
