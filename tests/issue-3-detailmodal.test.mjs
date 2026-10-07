@@ -31,7 +31,14 @@ async function openDetails(productId) {
 
 async function closeWithEsc() {
   await page.keyboard.press("Escape");
-  await page.waitForFunction(() => !document.querySelector("#product-dialog").open);
+  // Wait until focus is back on a "Details" button as well: the "close"
+  // event that restores it runs a moment after the dialog is closed, and a
+  // test that focuses something in between would have its focus stolen.
+  await page.waitForFunction(
+    () =>
+      !document.querySelector("#product-dialog").open &&
+      document.activeElement.matches('[data-action="show-details"]')
+  );
 }
 
 const readDialog = () =>
@@ -122,9 +129,13 @@ describe("Issue #3: Detailmodal", () => {
     const overflows = await page.$eval(body, (element) => element.scrollHeight > element.clientHeight);
     assert.ok(overflows, "Voraussetzung: der Inhalt ist höher als das Modal");
 
-    // Focus lands in the dialog; the scroll region must be reachable.
-    const focused = await page.evaluate(() => document.activeElement.matches("#product-dialog .dialog__body"));
-    assert.ok(focused, "der scrollbare Bereich bekommt den Fokus");
+    // The scroll region must be reachable with Tab (since #4 the close
+    // button comes first, before that the region itself got focus).
+    const isBodyFocused = () => page.evaluate(() => document.activeElement.matches("#product-dialog .dialog__body"));
+    for (let presses = 0; presses < 3 && !(await isBodyFocused()); presses++) {
+      await page.keyboard.press("Tab");
+    }
+    assert.ok(await isBodyFocused(), "der scrollbare Bereich ist per Tab erreichbar");
     await page.keyboard.press("PageDown");
     await page.waitForFunction((selector) => document.querySelector(selector).scrollTop > 0, {}, body);
 

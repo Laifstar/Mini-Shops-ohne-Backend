@@ -116,6 +116,44 @@ function renderDepositNote() {
   }
 }
 
+// ---------- Dialogs: opening and closing (issue #4) ----------
+
+// Remembers which button opened a dialog, so focus can go back there when it
+// closes. Current browsers do this on their own, older ones drop focus to
+// <body>, which sends keyboard users back to the top of the page.
+const returnFocusTo = new WeakMap();
+
+function openDialog(dialog, trigger) {
+  returnFocusTo.set(dialog, trigger);
+  dialog.showModal();
+}
+
+function setupDialog(dialog) {
+  // Only close on the backdrop if the click also *started* there. Otherwise
+  // selecting text inside the dialog and releasing the mouse outside it
+  // would close the dialog unexpectedly.
+  let pressedOnBackdrop = false;
+
+  dialog.addEventListener("pointerdown", (event) => {
+    pressedOnBackdrop = event.target === dialog;
+  });
+
+  dialog.addEventListener("click", (event) => {
+    // The dialog box has no padding and is completely covered by header and
+    // body, so a click whose target is the <dialog> itself hit the backdrop.
+    const isBackdropClick = event.target === dialog && pressedOnBackdrop;
+    if (isBackdropClick || event.target.closest('[data-action="close-dialog"]')) {
+      dialog.close();
+    }
+  });
+
+  // "close" fires for every way of closing: button, backdrop, Esc.
+  dialog.addEventListener("close", () => {
+    const trigger = returnFocusTo.get(dialog);
+    if (trigger?.isConnected) trigger.focus();
+  });
+}
+
 // ---------- Product detail modal (issue #3) ----------
 
 const productDialog = document.querySelector("#product-dialog");
@@ -185,9 +223,9 @@ function fillProductDialog(product) {
   field("ingredients").textContent = product.ingredients;
 }
 
-function openProductDialog(product) {
+function openProductDialog(product, trigger) {
   fillProductDialog(product);
-  productDialog.showModal();
+  openDialog(productDialog, trigger);
   // The dialog body keeps its scroll position between openings; start every
   // product at the top.
   productDialog.querySelector(".dialog__body").scrollTop = 0;
@@ -202,10 +240,11 @@ productGrid.addEventListener("click", (event) => {
   // Looked up by id, not by position: the modal must show the product that
   // was actually clicked, even if the list order ever changes.
   const product = PRODUCTS.find((item) => item.id === button.dataset.productId);
-  if (product) openProductDialog(product);
+  if (product) openProductDialog(product, button);
 });
 
 // ---------- Start ----------
 
+setupDialog(productDialog);
 renderDepositNote();
 renderProductList();

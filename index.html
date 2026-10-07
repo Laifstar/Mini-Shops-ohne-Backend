@@ -138,6 +138,13 @@
     <div class="dialog__header">
       <!-- Fallback text in case filling fails; normally replaced on open. -->
       <h2 class="dialog__title" id="product-dialog-title" data-field="name">Produktdetails</h2>
+      <!-- Icon-only button: the visually hidden text gives it its name. -->
+      <button type="button" class="dialog__close" data-action="close-dialog">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="visually-hidden">Schließen</span>
+      </button>
     </div>
 
     <!-- Only the body scrolls. tabindex="0" lets keyboard users focus it and
