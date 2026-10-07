@@ -9,3 +9,7 @@ node_modules/
 
 # The teacher's worksheets are not ours to publish.
 *_AB.pdf
+
+# Full-resolution originals of the process screenshots: local only, the
+# repository keeps the compressed JPEGs in docs/screenshots/prozess/.
+docs/screenshots/prozess-original/
