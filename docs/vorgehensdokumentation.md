@@ -11,7 +11,7 @@ Im Mittelpunkt stand nicht der Shop, sondern der **Weg dorthin**. Das Projekt so
 | | |
 |---|---|
 | Issues | 9: fünf vorgegebene (#1–#5) und vier selbst ergänzte (#10–#13) |
-| Pull Requests | 8 (#6–#9, #14–#17) plus der PR zu diesem Dokument; jeder mit Selbst-Review nach Checkliste, zwei davon in zwei Runden |
+| Pull Requests | 9 (#6–#9, #14–#18); jeder mit Selbst-Review nach Checkliste, zwei davon in zwei Runden |
 | Commits auf `main` | 51 kleine Commits im Conventional-Commits-Format; bis auf die zwei Commits der Grundausstattung alle mit `Refs #n` |
 | Automatische Tests | 63 (eine Testdatei pro Issue) |
 | Qualität | Lighthouse 4 × 100 (mobil und Desktop), axe-core 0 Verstöße in fünf Zuständen |
@@ -27,7 +27,7 @@ Im Mittelpunkt stand nicht der Shop, sondern der **Weg dorthin**. Das Projekt so
 | [#11 Warenkorb ansehen und bearbeiten](https://github.com/Laifstar/Mini-Shops-ohne-Backend/issues/11) | [#15](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/15) | Warenkorb-Dialog mit Summen und Pfand |
 | [#12 Barrierefreiheit prüfen](https://github.com/Laifstar/Mini-Shops-ohne-Backend/issues/12) | [#16](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/16) | Prüfung „Fortgeschritten“, vier Barrieren behoben |
 | [#5 Testen und Review durchführen](https://github.com/Laifstar/Mini-Shops-ohne-Backend/issues/5) | [#17](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/17) | Abschluss-Testrunde, Review-Checkliste dokumentiert |
-| [#13 Vorgehen dokumentieren](https://github.com/Laifstar/Mini-Shops-ohne-Backend/issues/13) | PR zu diesem Dokument | dieses Dokument, Prozess-Screenshots |
+| [#13 Vorgehen dokumentieren](https://github.com/Laifstar/Mini-Shops-ohne-Backend/issues/13) | [#18](https://github.com/Laifstar/Mini-Shops-ohne-Backend/pull/18) | dieses Dokument, Prozess-Screenshots |
 
 ## Ausgangslage und Neustart
 
