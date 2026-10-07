@@ -726,9 +726,31 @@ html:has(dialog[open]) {
 
 /* ---------- Motion ---------- */
 
-/* Motion is opt-in: only users without "reduce motion" get smooth scrolling. */
+/* Motion is opt-in: only users without "reduce motion" get smooth scrolling
+   and the fade-in of the modal. */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+
+  .dialog[open] {
+    animation: dialog-in 180ms ease-out;
+  }
+
+  .dialog[open]::backdrop {
+    animation: fade-in 180ms ease-out;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
