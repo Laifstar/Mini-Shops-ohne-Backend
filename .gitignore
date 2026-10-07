@@ -1,0 +1,11 @@
+# macOS / editor noise
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# Local tooling
+node_modules/
+*.log
+
+# The teacher's worksheets are not ours to publish.
+*_AB.pdf
