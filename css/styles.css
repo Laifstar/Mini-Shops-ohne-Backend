@@ -656,6 +656,13 @@ html:has(dialog[open]) {
   padding: var(--space-5);
 }
 
+/* The body fills the dialog, and the dialog clips everything outside it
+   (overflow: hidden), so the usual ring outside the element would be cut
+   off and the focus invisible. Drawn inside instead. */
+.dialog__body:focus-visible {
+  outline-offset: -3px;
+}
+
 .product-detail {
   display: grid;
   gap: var(--space-5);
@@ -821,11 +828,28 @@ html:has(dialog[open]) {
   grid-template-areas:
     "media info   total"
     "media stepper remove";
-  grid-template-columns: 2.5rem 1fr auto;
+  /* minmax(0, …): long names wrap instead of pushing the line wider. */
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
   gap: var(--space-2) var(--space-3);
   align-items: center;
   padding-block: var(--space-4);
   border-bottom: 1px solid var(--color-line);
+}
+
+/* Below 384px stepper and "Entfernen" do not fit side by side (WCAG 1.4.10
+   reflow at 320px): "Entfernen" moves into its own row. */
+@media (max-width: 23.99rem) {
+  .cart-line {
+    grid-template-areas:
+      "media info    total"
+      "media stepper stepper"
+      "media remove  remove";
+  }
+
+  .cart-line__remove {
+    justify-self: start;
+    padding-inline: 0;
+  }
 }
 
 .cart-line__media {
@@ -894,6 +918,15 @@ html:has(dialog[open]) {
 
 .stepper__button[aria-disabled="true"]:hover {
   background: transparent;
+}
+
+/* Windows contrast themes (forced colors) replace the grey above with the
+   normal button colour, so a locked button would look active. GrayText is
+   the system colour meant for exactly this. */
+@media (forced-colors: active) {
+  .stepper__button[aria-disabled="true"] {
+    color: GrayText;
+  }
 }
 
 .stepper__value {

@@ -304,15 +304,17 @@
       </div>
       <p class="cart-line__total" data-field="lineTotal"></p>
 
-      <!-- The group label gives the +/- buttons their context
-           ("Menge DOPPIO Original, Eine Dose weniger"). -->
+      <!-- The hidden labels name the product ("DOPPIO Original: eine Dose
+           weniger"): screen reader users often jump through a list of all
+           buttons, where three identical "Eine Dose mehr" are useless.
+           The group label adds the context when moving through the line. -->
       <div class="stepper" role="group" data-field="stepper">
         <button type="button" class="stepper__button" data-action="decrease">
-          <span aria-hidden="true">−</span><span class="visually-hidden">Eine Dose weniger</span>
+          <span aria-hidden="true">−</span><span class="visually-hidden" data-field="decreaseLabel">Eine Dose weniger</span>
         </button>
         <span class="stepper__value" data-field="quantity"></span>
         <button type="button" class="stepper__button" data-action="increase">
-          <span aria-hidden="true">+</span><span class="visually-hidden">Eine Dose mehr</span>
+          <span aria-hidden="true">+</span><span class="visually-hidden" data-field="increaseLabel">Eine Dose mehr</span>
         </button>
       </div>
       <button type="button" class="cart-line__remove" data-action="remove">
