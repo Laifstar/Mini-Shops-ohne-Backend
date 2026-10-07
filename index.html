@@ -15,6 +15,7 @@
        "defer" loads in parallel and runs in document order after parsing,
        so later scripts can rely on the data being there. -->
   <script src="js/data.js" defer></script>
+  <script src="js/cart.js" defer></script>
   <script src="js/app.js" defer></script>
 </head>
 <body>
@@ -26,6 +27,21 @@
       <p class="brand">
         <span class="brand__name">DOPPIO</span>
         <span class="brand__tag">Energy Shot</span>
+      </p>
+
+      <!-- Display only for now; opening the cart is issue #11. -->
+      <p class="cart-indicator">
+        <svg class="cart-indicator__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+          <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="19" r="1.5" fill="currentColor"/>
+          <circle cx="16.5" cy="19" r="1.5" fill="currentColor"/>
+        </svg>
+        <span class="cart-indicator__label">Warenkorb</span>
+        <!-- The count is a separate element so JS can update it without
+             touching the label; "Artikel" completes the text for screen
+             readers ("Warenkorb 3 Artikel") and fits 1 as well as 3. -->
+        <span class="cart-indicator__count" data-cart-count>0</span>
+        <span class="visually-hidden">Artikel</span>
       </p>
     </div>
   </header>
@@ -168,6 +184,17 @@
             </span>
           </p>
 
+          <!-- A real <form>: Enter in the number field submits, and the
+               browser validates min/max before "submit" ever fires. -->
+          <form class="add-to-cart" id="add-to-cart-form">
+            <div class="add-to-cart__quantity">
+              <label for="quantity-input">Menge</label>
+              <input id="quantity-input" name="quantity" type="number" inputmode="numeric"
+                     min="1" max="24" step="1" value="1" required>
+            </div>
+            <button type="submit" class="button button--primary">In den Warenkorb</button>
+          </form>
+
           <!-- Wording required by EU regulation 1169/2011 (Annex III) for
                drinks with more than 150 mg caffeine per litre. -->
           <p class="caffeine-warning">
@@ -193,6 +220,10 @@
       </div>
     </section>
   </dialog>
+
+  <!-- Confirmation after "In den Warenkorb". role="status" makes screen
+       readers announce new text politely, without moving focus. -->
+  <div class="toast" id="toast" role="status"></div>
 
   <!-- ===== Templates: inert markup that app.js clones and fills. ===== -->
 

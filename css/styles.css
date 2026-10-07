@@ -224,6 +224,54 @@ input {
   color: var(--color-on-dark-muted);
 }
 
+.cart-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  margin: 0;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  border: 2px solid rgb(244 231 212 / 0.4);
+  border-radius: var(--radius-pill);
+  color: var(--color-crema);
+  font-weight: 700;
+}
+
+/* Without flex: none the icon is the first thing flexbox shrinks on 320px screens. */
+.cart-indicator__icon {
+  flex: none;
+}
+
+.cart-indicator__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding-inline: 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-gold);
+  color: var(--color-ink);
+  font-size: 0.875rem;
+}
+
+/* Below 384px brand, tagline and cart no longer fit in one row. The cart
+   label is only hidden visually: icon and count stay visible, the text for
+   screen readers ("Warenkorb 0 Artikel") stays complete. */
+@media (max-width: 23.99rem) {
+  .brand__tag {
+    display: none;
+  }
+
+  .cart-indicator__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* ---------- Hero ---------- */
 
 .hero {
@@ -703,6 +751,60 @@ html:has(dialog[open]) {
   color: var(--color-muted);
 }
 
+.add-to-cart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.add-to-cart__quantity {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.add-to-cart__quantity label {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.add-to-cart__quantity input {
+  width: 5.5rem;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-5);
+  left: var(--space-4);
+  z-index: 20;
+  width: fit-content;
+  max-width: 28rem;
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-m);
+  background: var(--color-espresso);
+  color: var(--color-crema);
+  font-weight: 700;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {
@@ -719,7 +821,7 @@ html:has(dialog[open]) {
 /* ---------- Motion ---------- */
 
 /* Motion is opt-in: only users without "reduce motion" get smooth scrolling
-   and the fade-in of the modal. */
+   and the fade-ins of modal and toast. */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -731,6 +833,10 @@ html:has(dialog[open]) {
 
   .dialog[open]::backdrop {
     animation: fade-in 180ms ease-out;
+  }
+
+  .toast {
+    transition: opacity 200ms ease-out, transform 200ms ease-out;
   }
 }
 
