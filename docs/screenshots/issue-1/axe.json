@@ -1,0 +1,41 @@
+{
+  "axeVersion": "4.14.0",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+    "wcag22aa",
+    "best-practice"
+  ],
+  "runs": [
+    {
+      "state": "Startzustand",
+      "viewport": "desktop",
+      "screenshot": "start-desktop.png",
+      "consoleProblems": [],
+      "passes": 32,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ],
+      "violations": []
+    },
+    {
+      "state": "Startzustand",
+      "viewport": "mobil",
+      "screenshot": "start-mobil.png",
+      "consoleProblems": [],
+      "passes": 32,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ],
+      "violations": []
+    }
+  ]
+}
