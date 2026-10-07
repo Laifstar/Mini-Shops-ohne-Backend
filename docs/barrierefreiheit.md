@@ -1,8 +1,8 @@
 # Prüfprotokoll Barrierefreiheit (Issue #12)
 
-**Stufe „Fortgeschritten“ laut Arbeitsblatt:** Accessibility-QA und Lighthouse ≥ 90.
-**Prüfgegenstand:** der komplette Shop nach #1–#4, #10 und #11 (Liste, Detailmodal, Warenkorb).
-**Werkzeuge:** Chrome (headless) über Puppeteer, axe-core 4.14, Lighthouse 13.5, Accessibility-Tree von Chrome.
+**Stufe „Fortgeschritten“ laut Arbeitsblatt:** Accessibility-QA und Lighthouse ≥ 90.\
+**Prüfgegenstand:** der komplette Shop nach #1–#4, #10 und #11 (Liste, Detailmodal, Warenkorb).\
+**Werkzeuge:** Chrome (headless) über Puppeteer, axe-core 4.14, Lighthouse 13.5, Accessibility-Tree von Chrome.\
 **Prüfungen zum Nachvollziehen:** [`tests/issue-12-barrierefreiheit.test.mjs`](../tests/issue-12-barrierefreiheit.test.mjs) (`npm test`).
 
 ## 1 Ausgangslage

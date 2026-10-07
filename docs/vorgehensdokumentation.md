@@ -1,7 +1,7 @@
 # Vorgehensdokumentation: Projekt 1 „Mini-Shop-UI“
 
-**Fach:** LF10a, Benutzerschnittstellen gestalten und entwickeln (UW 5)
-**Thema:** Klickbare Kundendemo eines Mini-Shops ohne Backend, am Beispiel des fiktiven Energy Drinks **DOPPIO**
+**Fach:** LF10a, Benutzerschnittstellen gestalten und entwickeln (UW 5)\
+**Thema:** Klickbare Kundendemo eines Mini-Shops ohne Backend, am Beispiel des fiktiven Energy Drinks **DOPPIO**\
 **Werkzeuge:** GitHub Issues, Projects, Pull Requests; VS Code; Chrome DevTools; axe-core; Lighthouse
 
 Im Mittelpunkt stand nicht der Shop, sondern der **Weg dorthin**. Das Projekt sollte Schritt für Schritt über GitHub-Issues entstehen: planen, umsetzen, prüfen, mergen, kommentieren, abschließen. Dieses Dokument zeigt, wie das abgelaufen ist, belegt mit Issues, Pull Requests, Commits und Screenshots.
@@ -39,20 +39,16 @@ Zu Beginn gab es auf GitHub schon das Repository, das Board „DOPPIO: Mini-Shop
 
 Jedes Issue lief durch denselben Zyklus:
 
-```mermaid
-flowchart LR
-    A[Issue auf<br>„In progress“] --> B[Branch<br>feature/nr-name]
-    B --> C[kleine Commits<br>mit Refs #nr]
-    C --> D[Tests und<br>Gegenprobe]
-    D --> E[Nachweise<br>qa:evidence]
-    E --> F[Pull Request<br>Closes #nr]
-    F --> G[Board<br>„In review“]
-    G --> H[Selbst-Review<br>nach Checkliste]
-    H -->|Befund| C
-    H -->|ok| I[Merge-Commit,<br>Branch löschen]
-    I --> J[Issue schließt,<br>Board „Done“]
-    J --> K[Kriterien abhaken,<br>Abschlusskommentar]
-```
+1. Issue auf dem Board nach **In progress** ziehen.
+2. Branch von `main` anlegen: `feature/<nr>-<kurzname>`.
+3. In kleinen Commits umsetzen, jeder mit `Refs #<nr>`.
+4. Für jedes Akzeptanzkriterium einen Browser-Test schreiben und eine **Gegenprobe** machen: Fehler absichtlich einbauen, Test muss rot werden.
+5. **Nachweise** erzeugen (`npm run qa:evidence -- <nr>`) und committen.
+6. Pushen, **Pull Request** mit `Closes #<nr>` öffnen, Issue auf **In review**.
+7. **Selbst-Review** nach Checkliste. Bei einem Befund: Korrektur-Commit, Antwort am Zeilenkommentar, neue Review-Runde (zurück zu 3).
+8. **Mergen** per Merge-Commit, Branch löschen. GitHub schließt das Issue, das Board springt auf **Done**.
+9. Im Issue die Akzeptanzkriterien **abhaken** und einen **Abschlusskommentar** schreiben: Ergebnis, Nachweise, was als Nächstes kommt.
+10. Screenshots von Board, Pull Request und Issue für diese Dokumentation.
 
 **Konventionen:**
 
