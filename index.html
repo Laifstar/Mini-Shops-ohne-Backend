@@ -130,6 +130,58 @@
     </div>
   </footer>
 
+  <!-- ===== Product detail modal =====
+       One dialog is reused for all products and filled on open.
+       Native <dialog> + showModal() gives us focus containment, Esc to
+       close, ::backdrop and an inert background for free. -->
+  <dialog class="dialog" id="product-dialog" aria-labelledby="product-dialog-title">
+    <div class="dialog__header">
+      <!-- Fallback text in case filling fails; normally replaced on open. -->
+      <h2 class="dialog__title" id="product-dialog-title" data-field="name">Produktdetails</h2>
+    </div>
+
+    <div class="dialog__body">
+      <div class="product-detail">
+        <div class="product-detail__media" data-field="media"></div>
+
+        <div class="product-detail__content">
+          <p class="product-detail__flavour" data-field="flavour"></p>
+          <p data-field="description"></p>
+
+          <p class="product-detail__price">
+            <span class="price" data-field="price"></span>
+            <span class="price-note">
+              inkl. MwSt., zzgl. <span data-field="deposit"></span> Pfand ·
+              <span data-field="unitPrice"></span>
+            </span>
+          </p>
+
+          <!-- Wording required by EU regulation 1169/2011 (Annex III) for
+               drinks with more than 150 mg caffeine per litre. -->
+          <p class="caffeine-warning">
+            <strong>Erhöhter Koffeingehalt.</strong> Für Kinder und schwangere oder
+            stillende Frauen nicht empfohlen (<span data-field="caffeinePer100ml"></span>&nbsp;mg/100&nbsp;ml).
+          </p>
+
+          <h3>Nährwerte</h3>
+          <table class="nutrition">
+            <thead>
+              <tr>
+                <th scope="col">Durchschnittlich enthalten</th>
+                <th scope="col">pro 100 ml</th>
+                <th scope="col">pro Dose (<span data-field="volume"></span>)</th>
+              </tr>
+            </thead>
+            <tbody data-field="nutrition"></tbody>
+          </table>
+
+          <h3>Zutaten</h3>
+          <p class="product-detail__ingredients" data-field="ingredients"></p>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <!-- ===== Templates: inert markup that app.js clones and fills. ===== -->
 
   <template id="product-card-template">
@@ -142,6 +194,9 @@
           <span class="price" data-field="price"></span>
           <span class="unit-price" data-field="unitPrice"></span>
         </p>
+        <button type="button" class="button product-card__details" data-action="show-details" aria-haspopup="dialog">
+          Details<span class="visually-hidden" data-field="detailsLabel"></span>
+        </button>
       </div>
     </li>
   </template>
