@@ -24,7 +24,8 @@ Closes #
 ## Review checklist
 
 The author ticks every box before asking for review (self-check). The reviewer verifies each item
-independently and does not rely on the ticks.
+independently and does not rely on the ticks. How to check each item, severity levels and decision rules:
+[docs/review-checkliste.md](https://github.com/Laifstar/Mini-Shops-ohne-Backend/blob/main/docs/review-checkliste.md) (German).
 
 **A. Scope**
 - [ ] A1 Issue linked, what and why described
