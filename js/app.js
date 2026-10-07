@@ -320,6 +320,8 @@ function createCartLine({ product, quantity, totalCents }) {
   field("lineTotal").textContent = formatPrice(totalCents);
   field("quantity").textContent = String(quantity);
   field("stepper").setAttribute("aria-label", `Menge ${product.name}`);
+  field("decreaseLabel").textContent = `${product.name}: eine Dose weniger`;
+  field("increaseLabel").textContent = `${product.name}: eine Dose mehr`;
   field("removeLabel").textContent = ` ${product.name}`;
 
   // aria-disabled instead of disabled: a disabled button loses focus, and a
