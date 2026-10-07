@@ -43,6 +43,7 @@ Alternativ in VS Code mit der Erweiterung *Live Server* („Go Live“).
 |----------|-------|
 | Grundgerüst: Header, Hero mit Dosenvergleich, Footer; Produktdaten als JavaScript-Modul | #1 |
 | Listenansicht: 6 Sorten als Karten mit Bild, Preis, Grundpreis pro Liter und Merkmalen, 1/2/3 Spalten je nach Bildschirm | #2 |
+| Detailmodal: „Details“ öffnet Beschreibung, Preis, Koffein-Pflichthinweis, Nährwerttabelle (pro 100 ml und pro Dose) und Zutaten des angeklickten Produkts | #3 |
 
 ## Aufbau
 
