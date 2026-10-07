@@ -140,7 +140,12 @@
       <h2 class="dialog__title" id="product-dialog-title" data-field="name">Produktdetails</h2>
     </div>
 
-    <div class="dialog__body">
+    <!-- Only the body scrolls. tabindex="0" lets keyboard users focus it and
+         scroll with the arrow keys; without a focusable element inside, the
+         nutrition table would be unreachable (axe: scrollable-region-focusable).
+         Current Chrome makes scroll containers focusable on its own, Safari
+         does not. A named <section> is announced as "Produktdetails, Region". -->
+    <section class="dialog__body" tabindex="0" aria-label="Produktdetails">
       <div class="product-detail">
         <div class="product-detail__media" data-field="media"></div>
 
@@ -179,7 +184,7 @@
           <p class="product-detail__ingredients" data-field="ingredients"></p>
         </div>
       </div>
-    </div>
+    </section>
   </dialog>
 
   <!-- ===== Templates: inert markup that app.js clones and fills. ===== -->

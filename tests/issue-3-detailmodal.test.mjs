@@ -111,6 +111,39 @@ describe("Issue #3: Detailmodal", () => {
     await closeWithEsc();
   });
 
+  it("der Inhalt des Modals lässt sich per Tastatur scrollen", async () => {
+    // Small phone: the nutrition table does not fit, the body has to scroll.
+    await page.setViewport({ width: 360, height: 640 });
+    await page.focus('[data-action="show-details"][data-product-id="original"]');
+    await page.keyboard.press("Enter");
+    await page.waitForSelector("#product-dialog[open]");
+
+    const body = "#product-dialog .dialog__body";
+    const overflows = await page.$eval(body, (element) => element.scrollHeight > element.clientHeight);
+    assert.ok(overflows, "Voraussetzung: der Inhalt ist höher als das Modal");
+
+    // Focus lands in the dialog; the scroll region must be reachable.
+    const focused = await page.evaluate(() => document.activeElement.matches("#product-dialog .dialog__body"));
+    assert.ok(focused, "der scrollbare Bereich bekommt den Fokus");
+    await page.keyboard.press("PageDown");
+    await page.waitForFunction((selector) => document.querySelector(selector).scrollTop > 0, {}, body);
+
+    await closeWithEsc();
+    await page.setViewport({ width: 1280, height: 900 });
+  });
+
+  it("der scrollbare Bereich ist in jedem Browser fokussierbar und benannt", async () => {
+    // Chrome focuses scroll containers on its own, which is why the test
+    // above passes there even without tabindex. Safari does not, so the
+    // region has to be focusable explicitly.
+    const region = await page.$eval("#product-dialog .dialog__body", (element) => ({
+      tag: element.tagName,
+      tabIndex: element.getAttribute("tabindex"),
+      label: element.getAttribute("aria-label"),
+    }));
+    assert.deepEqual(region, { tag: "SECTION", tabIndex: "0", label: "Produktdetails" });
+  });
+
   it("öffnet und schließt ohne Fehler oder Warnungen in der Konsole", () => {
     assert.deepEqual(consoleProblems, []);
   });
