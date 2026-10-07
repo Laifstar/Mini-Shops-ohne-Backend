@@ -60,6 +60,10 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Reserves the scrollbar's space even while a dialog locks scrolling
+     (overflow: hidden below). Without it, systems with classic scrollbars
+     (e.g. Windows) shift the whole page sideways when a modal opens. */
+  scrollbar-gutter: stable;
   /* Keeps the sticky header from covering the target of in-page links. */
   scroll-padding-top: calc(var(--header-height) + var(--space-4));
 }
@@ -550,6 +554,11 @@ input {
 
 .dialog::backdrop {
   background: rgb(20 12 8 / 0.65);
+}
+
+/* Lock page scrolling while any modal is open. */
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 .dialog__header {
