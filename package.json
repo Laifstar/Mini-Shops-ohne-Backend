@@ -1,0 +1,19 @@
+{
+  "name": "doppio-mini-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Klickbare Kundendemo eines Mini-Shops ohne Backend (Schulprojekt LF10a). npm wird nur für die Qualitätssicherung gebraucht, nicht für die Seite selbst.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "lint:html": "html-validate index.html",
+    "qa:evidence": "node scripts/qa-evidence.mjs",
+    "screenshot:github": "node scripts/github-screenshot.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.0",
+    "html-validate": "^11.16.2",
+    "lighthouse": "^13.5.0",
+    "puppeteer-core": "^25.12.0"
+  }
+}
